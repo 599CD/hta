@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Expert - WriteFile</title>
+ 
+    <HTA:APPLICATION
+        APPLICATIONNAME = "Write File"
+		id="WriteFile"
+		name="WriteFile"
+    />
+	
+	<script language="vbscript">
+	Const ForWriting = 2
+	
+	Dim objFSO, objFile, strFileName
+	strFileName = "textfile.txt"
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+	
+	Set objFile = objFSO.OpenTextFile(strFileName, 2, true)
+	Set objShell = CreateObject("WScript.Shell")
+	
+	Sub Submitarea
+		sTxtarea = TextFile.Value
+		objFile.Write sTxtarea & vbCRLF
+		MsgBox "Your text has been added to " & strFileName, 64, "Textarea Input"
+	End Sub
+	
+	Sub OpenTxtArea
+		ShellRun = objShell.Run ("%comspec% /c Start Notepad " & strFileName, 0, 1)
+    End Sub 'OpenTxtArea
+	</script>
+	
+	</head>
+ 
+<body>
+    <h1>Write File</h1>
+    <p>How to Write to a File.</p>
+	
+	<textarea name="TextFile" id="TextFile" rows="5" cols="20">
+	</textarea>
+	
+	<input type="button" value="Submit" onclick="Submitarea">
+    <input type="button" value="Open" onclick="OpenTxtArea">
+	
+</body>
+ 
+</html>

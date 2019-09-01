@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Current User</title>
+	<HTA:APPLICATION
+        APPLICATIONNAME = "Current User"
+		ICON = "599CD.ico"
+    />
+	
+	<script language="vbscript">
+	Sub GetUserName()
+		Set WshNetwork = CreateObject("WScript.Network")
+		'Now simply grab the user's windows loginID and save to variable GetUser to use later in pasting
+		Dim GetUser
+		GetUser = WshNetwork.UserName 
+		Set WshNetwork = Nothing
+		user.innerHTML = "<p>" & GetUser & "</p>"
+	End Sub
+	</script>
+</head>
+
+<body>
+	<h1>User</h1>
+	<div id="user">
+		<script Language="VBScript">
+			GetUserName()
+		</script>
+	</div>
+</body>
+
+</html>

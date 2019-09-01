@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Using a Google Chart</title>
+    
+   <HTA:APPLICATION
+        APPLICATIONNAME = "Google Chart"
+        ICON = "599CD.ico"
+    />
+
+	<script language="vbscript">
+	' Connection String
+	Dim sConnect
+	'Commands
+	Dim objCmdPC 'Pie Chart
+	 
+	'RecordSets
+	Dim objRSPC
+	 
+	'Initialize Connection String to connect to an MS Access Database
+	sConnect = "Provider=Microsoft.Ace.OLEDB.12.0;Data Source=PCResale.accdb;Persist Security Info=False"
+	 
+	Sub CreateChart()
+	 
+		'Create a command object to execute Advancded SQL Statements
+		Set objCmdPC = CreateObject("ADODB.Command")
+		objCmdPC.ActiveConnection = sConnect    'Connect to database
+	 
+		' Total Number Customers in a Company
+		objCmdPC.CommandText = "SELECT CustomerT.CompanyName, Count(CustomerT.CompanyName) AS CountOfCompanyName FROM CustomerT GROUP BY CustomerT.CompanyName;"
+	 
+		' Create the actual recordset to be used in this script 
+		' and retrieve or display information from database
+		Set objRSPC = CreateObject("ADODB.Recordset")
+		Set objRSPC = objCmdPC.Execute
+		 
+		Dim strPC
+		Dim chartTitle
+		Dim chartValues
+		Dim chartLabels
+		Dim chartColours
+		 
+		Dim chtType
+	 
+		Dim n
+		For n = 0 to Document.Charts.chtType.length - 1
+			If Document.Charts.chtType(n).checked Then
+				chtType = Document.Charts.chtType(n).Value
+			End If
+		Next
+		 
+		While Not objRSPC.EOF
+			chartLabels = chartLabels & objRSPC("CompanyName") & " (" & objRSPC("CountOfCompanyName") & ")" & "|"
+			chartValues = chartValues & objRSPC("CountOfCompanyName") & ","
+			objRSPC.MoveNext
+		Wend
+		 
+		chartLabels = Left(chartLabels, len(chartLabels)-1)
+		chartValues = Left(chartValues, len(chartValues)-1)
+		 
+		chartTitle = "Number of Customers in a Company"
+		 
+		'https://developers.google.com/chart/image/docs/chart_params#gcharts_chs
+		'chtt=<chart_title>
+		'chts=<color>,<font_size>,<opt_alignment>
+		'chs=<width>x<height>
+		'chf=<fill_type>,s,<color>
+		'cht=<chart_type>
+		'chd=t:s,e,r,i,e,s,1|s,e,r,i,e,s,2|...  OR  s:series1,series2,...  OR  e:series1,series2,...
+		'chl=<label>|...
+		 
+		strPC = "<img src='http://chart.apis.google.com/chart?" &_
+					"chtt=" & chartTitle & "&" &_
+					"chts=000000,12&" &_
+					"chs=450x150&" &_
+					"chf=bg,s,ffffff&" &_
+					"cht=" & chtType & "&" &_
+					"chd=t:" & chartValues & "&" &_
+					"chl=" & chartLabels & "&" &_
+					"chco=FFCC00,33CC00,3333FF,CC0000' " &_
+					"alt='" & chartTitle & "'/>"
+	 
+		'msgbox strPC
+		document.Charts.source.value = strPC
+		myContent.innerHTML = strPC
+		 
+		'Clean Up and Close
+		objRSPC.Close
+		Set objRSPC = Nothing
+	 
+	End Sub
+	</script>
+
+</head>
+ 
+<body>
+     
+    <h1>Google Charts</h1>
+    <form name="Charts" method="post" action="GoogleChart.hta">
+	
+		<input type="button" value="Chart" OnClick="CreateChart()">
+		<input type="radio" name="chtType" value="p"> Flat
+		<input type="radio" name="chtType" value="p3" checked="checked"> Angled
+		
+		<br />
+		<input type="text" name="source" id="source" size="100">
+
+	</form>
+	
+	<h2>Results</h2>
+	<div id="myContent">
+	</div>
+	
+</body>
+</html>

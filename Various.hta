@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Useful Elements</title>
+	<HTA:APPLICATION
+        APPLICATIONNAME = "Useful Elements"
+	/>
+	
+	<script language="vbscript">
+	Sub Window_Onload
+		Msgbox "The application has started."
+	End Sub
+		
+	Sub RunScript_Refresh
+		Location.Reload(True)
+	End Sub
+	
+	Sub RunScript_Cursor
+		document.body.style.cursor = "wait"
+	End Sub
+	
+	Sub RunScript_Copy
+		strCopy = BasicTextArea.Value
+		document.parentwindow.clipboardData.SetData "text", strCopy
+	End Sub
+	
+	Sub RunScript_Paste
+		DataArea.InnerHTML = document.parentwindow.clipboardData.GetData("text")
+	End Sub
+	
+	Sub RunScript_Disable
+		BasicTextArea.Disabled = False
+	End Sub
+	
+	Sub RunScript_Confirmation
+		blnAnswer = window.confirm("Are you sure you want to continue?")
+		If blnAnswer Then
+			Msgbox "You clicked the OK button"
+		Else
+			Msgbox "You clicked the Cancel button."
+		End If
+	End Sub
+	
+	Sub RunScript_Prompt
+		strAnswer = window.prompt("Please enter the domain name.", "599CD.com")
+		If IsNull(strAnswer) Then
+			Msgbox "You clicked the Cancel button"
+		Else
+			Msgbox "You entered: " & strAnswer
+		End If
+	End Sub
+	
+	Sub RunScript_IE
+		Set objIE = CreateObject("InternetExplorer.Application")
+		objIE.Navigate("about:blank")
+		objIE.ToolBar = 0
+		objIE.StatusBar = 0
+		Set objDoc = objIE.Document.Body
+		strHTML = "<B>This information is displayed in a separate window.</B>"
+		objDoc.InnerHTML = strHTML
+		objIE.Visible = True
+	End Sub
+	
+	Sub RunScript_Print
+		Window.Print()
+	End Sub
+	
+	Sub RunScript_Save
+		Set objFSO = CreateObject("Scripting.FileSystemObject")
+		objFSO.CreateTextFile("test.htm")
+		Set objFile = objFSO.OpenTextFile("test.htm", 2)
+		objFile.WriteLine DataArea.InnerHTML
+		objFile.Close
+	End Sub
+	
+	Sub Window_OnLoad
+		iTimerID = window.setInterval("RunScript", 5000, "VBScript")
+	End Sub
+	
+	Sub RunScript_Tooltip
+		Tooltip.Title = "You successfully changed the tooltip."
+	End Sub
+	
+	Sub RunScript_Quit
+		Window.Close
+    End Sub
+	</script>
+</head>
+	<body>
+	<h1>Usful Elements</h1>
+	
+	<u>Refresh</u>
+	<p>
+		<input class="button" type="button" value="Refresh" id="Refresh" name="Refresh" onClick="RunScript_Refresh">
+	</p>
+	
+	<u>Cursor</u>
+	<p>
+		<input class="button" type="button" value="Cursor" id="Cursor" name="Cursor" onClick="RunScript_Cursor">
+	</p>
+	
+	<u>Copy</u>
+	<p>
+		<textarea id="BasicTextArea">A B C</textarea>
+		<br />
+		<input class="button" type="button" value="Copy" id="Copy" name="Copy" onClick="RunScript_Copy">
+	</p>
+	
+	<u>Paste</u>
+	<p>
+		<span id=DataArea>This is a span named DataArea.</span>
+		<br />
+		<input class="button" type="button" value="Paste" id="Paste" name="Paste" onClick="RunScript_Paste">
+	</p>
+	
+	<u>Disable</u>
+	<p>
+		<input class="button" type="button" value="Disable" id="Disable" name="Disable" onClick="RunScript_Disable">
+	</p>
+	
+	<u>Confirmation</u>
+	<p>
+		<input class="button" type="button" value="Confirmation" id="Confirmation" name="Confirmation" onClick="RunScript_Confirmation">
+	</p>
+	
+	<u>Prompt</u>
+	<p>
+		<input class="button" type="button" value="Prompt" id="Prompt" name="Prompt" onClick="RunScript_Prompt">
+	</p>
+	
+	<u>IE</u>
+	<p>
+		<input class="button" type="button" value="IE" id="IE" name="IE" onClick="RunScript_IE">
+	</p>
+	
+	<u>Print</u>
+	<p>
+		<input class="button" type="button" value="Print" id="Print" name="Print" onClick="RunScript_Print">
+	</p>
+	
+	<u>Save</u>
+	<p>
+		<input class="button" type="button" value="Save" id="Save" name="Save" onClick="RunScript_Save">
+	</p>
+	
+	<u>Timer</u>
+	<p>
+		<input class="button" type="button" value="Timer" id="Timer" name="Timer" onClick="Window_OnLoad">
+	</p>
+	
+	<u>Tooltip</u>
+	<p>
+		<input class="button" type="button" value="Tooltip" id="Tooltip" name="Tooltip" onClick="RunScript_Tooltip" title="Original Tooltip">
+	</p>
+	
+	<u>Quit</u>
+	<p>
+		<input class="button" type="button" value="Quit" id="Quit" name="Quit" onClick="RunScript_Quit">
+	</p>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Connect to Access db</title>
+   
+   <HTA:APPLICATION
+        APPLICATIONNAME = "Connect to Access db"
+		ICON = "599CD.ico"
+    />
+
+	<script language="vbscript">
+	Sub FillNames()
+		' Connection String
+		Dim sConnect
+		'Commands
+		Dim objCmd
+
+		'RecordSets
+		Dim objRS
+
+		'Initialize Connection String to connect to an MS Access Database
+		'sConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=PCResale.mdb;Persist Security Info=False"
+		sConnect = "Provider=Microsoft.Ace.OLEDB.12.0;Data Source=PCResale.accdb;Persist Security Info=False"
+
+		'Create a command object to execute Advancded SQL Statements
+		Set objCmd = CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = sConnect    'Connect to database
+
+		' Total Number of Submissions per supervisor
+		' Supervisor & CountOfRating
+		objCmd.CommandText = "SELECT FirstName FROM CustomerT;"
+
+		' Create the actual recordset to be used in this script 
+		' and retrieve or display information from database
+		Set objRS = CreateObject("ADODB.Recordset")
+		Set objRS = objCmd.Execute
+		
+		Dim strCustomers
+		
+		While Not objRS.EOF
+			'msgbox objRS(0)
+			'msgbox objRS("FirstName")
+			strCustomers = strCustomers & objRS("FirstName") & ","
+			objRS.MoveNext
+		Wend
+		
+		'msgbox strCustomers
+		myContent.innerHTML = "<p>Names: " & strCustomers & "</p>" 
+		
+		'Clean Up and Close
+		objRS.Close
+		Set objRS = Nothing
+	End Sub
+	</script>
+
+</head>
+
+<body onload="FillNames()">
+	
+	<h1>Connect to Access Db</h1>
+	<div id="myContent">
+	</div>
+
+</body>
+
+</html>
